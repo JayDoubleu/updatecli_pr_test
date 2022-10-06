@@ -1,0 +1,39 @@
+title: updatecli PR test
+scms:
+  default:
+    kind: github
+    spec:
+      user: test
+      email: test@test.com
+      owner: jaydoubleu
+      repository: updatecli_pr_test
+      token: '{{ or .github.token (requiredEnv "UPDATECLI_GITHUB_TOKEN") }}'
+      username: '{{ or .github.user (requiredEnv "UPDATECLI_GITHUB_ACTOR") }}'
+      branch: main
+
+sources:
+  latestVersion:
+    name: Get latest Venom release
+    kind: githubrelease
+    spec:
+      owner: ovh
+      repository: venom
+      token: '{{ or .github.token (requiredEnv "UPDATECLI_GITHUB_TOKEN") }}'
+
+targets:
+  target_one:
+    name: target one
+    sourceid: latestVersion
+    kind: yaml
+    scmid: default
+    spec:
+      file: "testfile_one.yaml"
+      key: "version"
+  target_two:
+    name: target two
+    sourceid: latestVersion
+    kind: yaml
+    scmid: default
+    spec:
+      file: "testfile_two.yaml"
+      key: "version"
