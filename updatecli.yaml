@@ -1,0 +1,53 @@
+title: updatecli PR test
+
+scms:
+  scm_one:
+    kind: github
+    spec:
+      user: test_one
+      email: test@test.com
+      owner: JayDoubleu
+      repository: updatecli_pr_test
+      token: '{{ or .github.token (requiredEnv "UPDATECLI_GITHUB_TOKEN") }}'
+      username: '{{ or .github.user (requiredEnv "UPDATECLI_GITHUB_ACTOR") }}'
+      branch: main
+      directory: /tmp/dir_one
+  scm_two:
+    kind: github
+    spec:
+      user: test_two
+      email: test@test.com
+      owner: JayDoubleu
+      repository: updatecli_pr_test
+      token: '{{ or .github.token (requiredEnv "UPDATECLI_GITHUB_TOKEN") }}'
+      username: '{{ or .github.user (requiredEnv "UPDATECLI_GITHUB_ACTOR") }}'
+      branch: main
+      directory: /tmp/dir_two
+
+sources:
+  latestVersion:
+    name: version_one
+    kind: githubrelease
+    spec:
+      owner: ovh
+      repository: venom
+      token: '{{ or .github.token (requiredEnv "UPDATECLI_GITHUB_TOKEN") }}'
+
+targets:
+  target_one:
+    name: target one
+    sourceid: latestVersion
+    kind: yaml
+    scmid: scm_one
+    spec:
+      file: "testfile_one.yaml"
+      key: "version"
+
+  target_two:
+    name: target two
+    sourceid: latestVersion
+    kind: yaml
+    scmid: scm_two
+    spec:
+      file: "testfile_two.yaml"
+      key: "version"
